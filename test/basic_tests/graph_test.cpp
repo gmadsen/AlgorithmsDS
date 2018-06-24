@@ -3,14 +3,13 @@
 //
 
 #include "gtest/gtest.h"
-
-
-#include <fstream>
+#include "algorithmsDS.h"
 #include <list>
 #include <vector>
-#include <utility>
-#include <algorithm>
 #include <Graph.h>
+#include <WeightedGraph.h>
+#include <VertexHeap.h>
+#include "algorithmsDS.h"
 
 
 using namespace std;

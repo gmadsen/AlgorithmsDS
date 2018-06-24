@@ -7,4 +7,16 @@ include_directories(src)
 
 add_subdirectory(test)
 
-add_library(AlgorithmsDS SHARED src/Graph.cpp src/Graph.h src/mult_algorithm.h src/mult_algorithm.cpp)
+add_library(AlgorithmsDS
+        SHARED
+        src/Graph.cpp
+        src/Graph.h
+        src/mult_algorithm.h
+        src/mult_algorithm.cpp
+        src/algorithmsDS.cpp
+        src/algorithmsDS.h
+        src/WeightedGraph.cpp
+        src/WeightedGraph.h
+        src/VertexHeap.cpp
+        src/VertexHeap.h)
+
