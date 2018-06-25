@@ -4,10 +4,16 @@
 
 #pragma once
 
+#include <list>
 #include "Graph.h"
 #include "WeightedGraph.h"
 
+
 namespace AlgorithmDS {
+
+   int min_cut_contraction(std::__cxx11::list<std::pair<int, std::__cxx11::list<int>>> graph);
+   int min_cut_contraction(const Graph &g);
+
 // EFFECTS: explore all vertices in graph with Depth first search
     void dfs(const AlgorithmDS::Graph &g, int s, std::vector<bool> &explored);
 

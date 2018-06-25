@@ -5,8 +5,11 @@
 #include "Graph.h"
 #include <algorithm>
 #include <iostream>
+#include <memory>
 #include <map>
 #include <set>
+#include <boost/iterator/zip_iterator.hpp>
+#include <boost/range/iterator_range.hpp>
 
 using namespace std;
 
@@ -18,27 +21,32 @@ namespace AlgorithmDS {
 
 
 /////////////// class Graph //////////////////////////
-    Graph::Graph(adj_t::size_type size)
-            : vertex_count(size), adjlist(size, list<int>()) {}
+    Graph::Graph() {}
 
-    Graph::Graph(adj_t::size_type size, ifstream &input)
-            : vertex_count(size), adjlist(size, list<int>()) {
+    Graph::Graph(ifstream &input) {
         add_edges_from_stream(input, *this);
     }
 
-    const adj_t &Graph::get_adjacency_list() const { return adjlist; }
+    const std::vector<std::unique_ptr<Graph::Vertex>> &Graph::get_vertices() const { return vertices; }
 
-    adj_t::size_type Graph::size() const { return vertex_count; }
+    size_t Graph::size() const { return vertices.size(); }
 
-    void Graph::add_edge(int u, int v) { adjlist[u].push_back(v); }
+    void Graph::add_edge(int u, int v) {
+        size_t size = this->size();
+        while (size < u + 1) {
+            vertices.emplace_back(std::make_unique<Vertex>());
+            ++size;
+        }
+        vertices[u]->adj_edges.emplace_back(make_pair(v, 1));
+    }
 
 // EFFECTS: print adjacency list for each vertex
     void Graph::print() const {
-        for (auto i = adjlist.begin();
-             i != adjlist.end(); ++i) {
-            cout << "vertex " << distance(adjlist.begin(), i) << " is adjacent to: ";
-            for (auto j = i->begin(); j != i->end(); ++j) {
-                cout << *j << " ";
+        for (auto i = vertices.begin();
+             i != vertices.end(); ++i) {
+            cout << "vertex " << distance(vertices.begin(), i) << " is adjacent to: ";
+            for (auto j = (*i)->adj_edges.begin(); j != (*i)->adj_edges.end(); ++j) {
+                cout << (*j).first << " ";
             }
             cout << endl;
         }
@@ -54,11 +62,27 @@ namespace AlgorithmDS {
 ///////////////////////////////////////////////////////
 /////////////Overloads and Helpers////////////////////
 //////////////////////////////////////////////////////
+    template<class... Conts>
+    auto zip_range(Conts &... conts)
+    -> decltype(boost::make_iterator_range(
+            boost::make_zip_iterator(boost::make_tuple(conts.begin()...)),
+            boost::make_zip_iterator(boost::make_tuple(conts.end()...)))) {
+        return {boost::make_zip_iterator(boost::make_tuple(conts.begin()...)),
+                boost::make_zip_iterator(boost::make_tuple(conts.end()...))};
+    }
+
+// ...
 
 // EFFECTS: == override for class Graph
     bool operator==(const Graph &left, const Graph &right) {
-        return (left.size() == right.size() &&
-                left.get_adjacency_list() == right.get_adjacency_list());
+        const auto &lhs = left.get_vertices();
+        const auto &rhs = right.get_vertices();
+        if (left.size() != right.size()) return false;
+        for (auto &&t : zip_range(lhs, rhs)) {
+            if (t.get<0>()->adj_edges != t.get<1>()->adj_edges) return false;
+
+        }
+        return true;
     }
 
     void add_edges_from_stream(ifstream &input, Graph &g) {

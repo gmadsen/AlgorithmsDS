@@ -10,7 +10,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <list>
 
 // main.exe num1 num2
 
@@ -58,4 +57,3 @@ void quicksort(std::vector<int>::iterator begin, std::vector<int>::iterator end,
 
 // EFFECTS: calc min cut by random contraction algorithm
 
-int min_cut_contraction (std::list<std::pair<int,std::list<int>>> graph);

@@ -2,10 +2,13 @@
 // Created by garrett on 6/21/18.
 //
 #include "gtest/gtest.h"
+#include "algorithmsDS.h"
 #include <mult_algorithm.h>
+#include "algorithmsDS.h"
 
 
 using namespace std;
+using namespace AlgorithmDS;
 
 // test addition basic
 TEST(test_find_sum, small) {
