@@ -17,7 +17,6 @@ namespace AlgorithmDS {
         struct Vertex {
             int label;
             std::vector<std::pair<int,int>> adj_edges;
-            bool explored;
         };
         std::vector<std::unique_ptr<Vertex>> vertices;
     public:
@@ -34,6 +33,9 @@ namespace AlgorithmDS {
 
         // EFFECTS: add edge to graph
         void add_edge(int u, int v);
+
+        // EFFECTS: remove edge from graph
+        void remove_edge(int u, int v);
 
         const std::vector<std::unique_ptr<Vertex>> & get_vertices() const;
 
